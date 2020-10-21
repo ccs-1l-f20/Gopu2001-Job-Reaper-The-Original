@@ -25,31 +25,25 @@ def create_connection(db_file):
 
 main_cnxn, main_curs = create_connection('jobs.db')
 main_curs.execute("select name from sqlite_master where type='table' and name = 'jobs'")
-if 'jobs' in main_curs.fetchone():
+fetcher = main_curs.fetchone()
+print(fetcher)
+if fetcher and 'jobs' in fetcher:
     main_curs.execute('drop table jobs')
     main_cnxn.commit()
-main_curs.execute('create table jobs (title nvarchar(120), yes_no bit)')
+main_curs.execute('create table jobs (company nvarchar(20), title nvarchar(120), link nvarchar(175))')
 main_cnxn.commit()
 
+insertion_cmd = "insert into jobs(company, title, link) values "
+notFirst = False
 for database_file in listdir('jobs/'):
     next_cnxn, next_curs = create_connection('jobs/' + database_file)
-    next_curs.execute('select title from co_jobs')
+    next_curs.execute('select company, title, link from co_jobs')
     job_opportunities = next_curs.fetchall()
-    for title in job_opportunities:
-        insertion_cmd = f"insert into jobs(title, yes_no) values ('{title[0]}', '1')"
-        main_curs.execute(insertion_cmd)
-        main_cnxn.commit()
-    print("Added data from", database_file)
-
-nj_file = open('output_non_jobs.txt', mode='r', encoding='utf8')
-for line in nj_file.readlines():
-    n_job = line.strip()[0:120]
-    if "'" in n_job:
-        n_job = n_job.replace("'", "")
-    insertion_cmd = f"insert into jobs(title, yes_no) values ('{n_job}', '0')"
-    main_curs.execute(insertion_cmd)
-    main_cnxn.commit()
-print("Added data from NON JOBS")
-
-main_curs.close()
-main_cnxn.close()
+    for (company, title, link) in job_opportunities:
+        if notFirst:
+            insertion_cmd += ','
+        insertion_cmd += f"('{company}', '{title}', '{link}') "
+        notFirst = True
+    print("Adding data from", database_file)
+main_curs.execute(insertion_cmd)
+main_cnxn.commit()
