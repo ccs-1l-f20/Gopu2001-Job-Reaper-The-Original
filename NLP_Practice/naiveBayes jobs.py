@@ -17,17 +17,17 @@ except sql.Error as e:
     print(e)
     sys.exit(1)
 
-df = pd.read_sql_query("select title, yes_no from jobs", conn)
+df = pd.read_sql_query("select distinct(title, yes_no) from jobs", conn)
 keys = ['title', 'yes_no']
 
 X_train, X_test, y_train, y_test = train_test_split(df['title'], df['yes_no'], random_state=1)
 cv = CountVectorizer(strip_accents='ascii', token_pattern=u'(?ui)\\b\\w*[a-z]+\\w*\\b', lowercase=True, stop_words='english')
 
 X_train_cv = cv.fit_transform(X_train)
-X_test_cv  = cv.fit_transform(X_test)
+X_test_cv  = cv.transform(X_test)
 word_freq_df = pd.DataFrame(X_train_cv.toarray(), columns=cv.get_feature_names())
 
-top_words_df = pdf.DataFrame(word_freq.sum()).sortValues(0, ascending=False)
+#top_words_df = pd.DataFrame(word_freq_df[''].sum()).sortValues(0, ascending=False)
 naive_bayes = MultinomialNB()
 naive_bayes.fit(X_train_cv, y_train)
 predictions = naive_bayes.predict(X_test_cv)

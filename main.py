@@ -1,4 +1,6 @@
 #!/usr/bin/python3.8
+# Anmol Kapoor
+
 print('Updating Database. May take upto 2 minutes depending on Internet connection')
 # Part 1 #######################################################################
 '''
@@ -218,7 +220,7 @@ job_conn.close()
 
 def switch():
     job_conn, job_cursor = create_connection('jobs.db')
-    
+
     job_cursor.execute('drop table job_listings')
     job_conn.commit()
     job_cursor.execute("alter table `to_rep` rename to `job_listings`")
@@ -232,6 +234,7 @@ options.add_argument('headless')
 options.add_argument('log-level=3') # fatal errors only
 options.add_argument('no-sandbox') # potentially solve tab crash problems
 options.add_argument('disable-gpu') # potentially solve GpuChannelMsg_CreateCommandBuffer
+options.add_argument('mute-audio') # to resolve issues with MediaEvents
 
 job_opps = []
 
@@ -639,21 +642,21 @@ except:
     job_conn.commit()
     print("Error occurred. Please try again later.")
 
-job_conn, job_cursor = create_connection('jobs.db')
+# job_conn, job_cursor = create_connection('jobs.db')
 
-switch()
+# switch()
 #job_cursor.execute("select count(*) from job_listings")
 #total_job_opportunities = job_cursor.fetchone()[0]
-command = "with cte as ( select company, title, link, ROW_NUMBER() over (partition by company, title, link order by company, title, link) row_num from job_listings ) delete from cte where row_num > 1"
-job_cursor.execute(command)
-job_conn.commit()
+# command = "with cte as ( select company, title, link, ROW_NUMBER() over (partition by company, title, link order by company, title, link) row_num from job_listings ) delete from cte where row_num > 1"
+# job_cursor.execute(command)
+# job_conn.commit()
 #job_cursor.execute("select count(*) from job_listings")
 #final_job_opportunities = job_cursor.fetchone()[0]
 #job_cursor.execute("select count(distinct company) from job_listings")
 #total_company_count = job_cursor.fetchone()[0]
 
-job_cursor.close()
-job_conn.close()
+# job_cursor.close()
+# job_conn.close()
 
 #print("Time it took to load job opps from " + str(total_company_count) + " companies: {} seconds".format(time.time() - start_time))
 #print("There are {} jobs available!".format(final_job_opportunities))
