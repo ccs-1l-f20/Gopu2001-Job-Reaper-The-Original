@@ -111,7 +111,6 @@ Board of Directors
 Investor Relations
 Contact Us
 Customers
-Customer Support
 Join a Local User Group
 Partners
 All Partner Programs
@@ -221,7 +220,6 @@ We’ve saved 2.5 million trees’ worth of paper—and we’re just getting sta
 Ready to get started?
 Free Trial
 PRODUCTS
-eSignature
 Document Generation
 See All Products
 PRICING
@@ -305,7 +303,6 @@ Published in Hernia: The World Journal of Hernia and Abdominal Wall Surgery, a n
 The science behind evidence-based care
 Learn about the fast-accumulating clinical evidence that backs the advance of minimally invasive care.
 Disclosures and Important Safety Information
-Important Safety Information
 Patients should talk to their doctor to decide if da Vinci surgery is right for them. Patients and doctors should review all available information on non-surgical and surgical options and associated risks in order to make an informed decision.
 Serious complications may occur in any surgery, including da Vinci surgery, up to and including death. Serious risks include, but are not limited to, injury to tissues and organs and conversion to other surgical techniques which could result in a longer operative time and/or increased complications. For Important Safety Information, including surgical risks, indications, and considerations and contraindications for use, please also refer to www.intuitive.com/safety.
 Individuals' outcomes may depend on a number of factors, including but not limited to patient characteristics, disease characteristics and/or surgeon experience.
@@ -373,16 +370,19 @@ Users Rank TripActions #1 in Corporate T&E Management
 TripActions is named a leader in G2's Travel & Expense Management Report
 Get the report
 Featured In
-more
 Next Steps
 Watch a 3-Minute Demo
 Learn how TripActions can manage your travel and expenses
+Learn More
 Corporate T&E Podcast
 A series of conversations about business travel and expenses
+Learn More
 Academy
 The Path to Modern Corporate Travel Management
+Learn More
 Use Cases
 See how TripActions works for your team
+Learn More
 How It Works
 Trust & Transparency
 TripActions Reviews
@@ -398,7 +398,6 @@ Corporate Travel Policy
 Corporate Travel Solution
 Duty of Care
 Risk Management
-Travel Management
 Travel Software
 Travel Costs
 Change region
@@ -413,7 +412,6 @@ Navigate to Bird Instagram Profile
 Rider
 How to Bird
 Map
-Safety
 Rent
 Shop
 Vehicles
@@ -423,8 +421,8 @@ Bird Cruiser
 Partner
 Cities
 Platform
-Impact
 Contact us
+Blog
 Bird Accepted as Micromobility’s First Signatory of UN Global Compact
 10.8.20
 Bird Teams With NABSA on Roll to the Polls Initiative for 2020 Election
@@ -437,6 +435,7 @@ Ride
 Ride now
 Skip to content
 Prices
+Products
 Earn crypto
 Sign in
 Buy and sell cryptocurrency
@@ -499,7 +498,6 @@ Start buying & selling
 Earn crypto while learning about crypto
 Coinbase logo
 © 2020 Coinbase
-Coinbase
 Commerce
 Custody
 Earn
@@ -523,7 +521,6 @@ Taxes
 Affiliates
 Legal & Privacy
 Cookie Policy
-Support
 Social
 We use our own cookies as well as third-party cookies on our websites to enhance your experience, analyze our traffic, and for security and marketing. For more info, see our Cookie Policy.
 Manage settings
@@ -590,9 +587,6 @@ SecurityPrivacyTerms
 © 2020 Breezy HR, Inc.
 More PeopleFluent Talent Solutions
 Part of Learning Technologies Group plc
-Features
-Integrations
-Team
 eBooks
 HR Resources
 Help Resources
@@ -656,7 +650,6 @@ Operations
 icon for People team
 People
 icon for Sales team
-Sales
 Get Labeled Data Today
 illustration of Scale's logo
 Scale 3D Sensor Fusion
@@ -666,7 +659,6 @@ Scale Text
 Scale Document
 Scale Audio
 Scale Nucleus
-Open Datasets
 Interviews
 Documentation
 FIND US
@@ -698,7 +690,6 @@ THE SALES ENGAGEMENT BOOK
 Order the Sales Engagement Book now!
 Drive Efficient Growth with Every Interaction
 OUR PRODUCT
-Icon
 Make every customer-facing rep wildly productive
 A single platform to drive efficiency and effectiveness for Marketing, Sales Development, Closing and Success teams.
 Optimize customer lifecycle for revenue lift
@@ -740,7 +731,6 @@ Recruiting
 Why Choose Outreach
 Trust
 Resource Library
-University
 Knowledge Base
 Platform Status
 Articles
@@ -761,7 +751,6 @@ Reminder: Deadlines to send inventory to Deliverr for BFCMRead More
 eCommerce fulfillment and warehousing services from Deliverr
 Log In Sign Up
 Solution
-Overview
 Amazon
 Walmart
 eBay
@@ -772,6 +761,9 @@ Pricing Cost Calculator Integrations Blog Language
 中文 (简体)
 Español
 eCommerce fulfillment and warehousing services from DeliverreCommerce fulfillment and warehousing services from Deliverr
+Solution
+Pricing Cost Calculator Integrations Blog Language
+Log In Sign Up
 Fast and Affordable Fulfillment
 Accelerate your marketplace and website sales
 Enter your email address
@@ -794,7 +786,6 @@ SIZE
 WEIGHT
 1.5oz
 Fulfillment cost (includes shipping)
-Standard
 $3.99
 Shopify 2-Day
 $6.72
@@ -821,7 +812,6 @@ See pricing for your items with our Cost Calculator
 BOOST SALES
 Get the badges that increase sales
 Facebook 2-day delivery
-2-day delivery
 FREE 2-Day Delivery
 Reduce CPA by 50%
 Instagram 2-day delivery
@@ -868,7 +858,6 @@ Our reviews
 Connect your channels with Deliverr in just a few clicks.
 Create a Free Account
 SOLUTION
-Cost Calculator
 FAQs
 Discoverr Conference
 Join our Warehouse Network!
@@ -890,7 +879,6 @@ Walmart.com category rule
 Follow us on
 © 2020 Deliverr™, Inc.
 Terms of Service
-Privacy
 Contact Sales: 8am-8pm (ET)
 (888) 885.5299
 hello@jazzhr.com
@@ -961,6 +949,7 @@ Follow these best practices to enhance your recruitment strategy.
 Terms Of Service
 |
 |  |
+|
 Avery Dennison Equinox LinkedIn Skechers Visa
 Check out SmartMessage
 Everything you need to attract, select and hire great talent
@@ -985,7 +974,6 @@ LEARN MORE ABOUT TALENT SOURCING
 Candidate Sourcing screenshots
 IDC Logo
 SmartRecruiters named a leader in the 2019 IDC MarketScape
-Read More
 Fosway Group Badge
 Fosway Group Recognizes SmartRecruiters as a Core Leader in Talent Acquisition.
 More Diverse & Inclusive Recruiting
@@ -1042,16 +1030,13 @@ Partner Marketplace
 Become a partner
 Latest Jobs
 Hiring Glossary
-News
 Cookie policy
 Privacy policy
 Legal Terms
 Imprint
-Services
 Help Center
 Status & Trust
 Developer Portal
-Log In
 Enter your email below to sign up for our newsletter.
 By filling out this form you agree to our Privacy Policy and Terms of Service, as well as express your consent to receive communications from us.
 Select Country...
@@ -1059,7 +1044,6 @@ SUBMIT
 SmartRecruiters
 The traditional Applicant Tracking System (or ATS), lacks hiring manager engagement, hiring team collaboration, and real integration with recruiting services.
 As Liz Ryan wrote on Forbes, 'The ATS vendors that will survive to 2020 and beyond will be the ones that figure out how to humanize the selection process. Luckily, it isn't complicated.'
-Recruiting Software
 SmartRecruiters Talent Acquisition Suite is recruiting software that puts all your recruiting solutions, people, and vendors at your finger tips. This enables you to run your talent acquisition program like a high-powered marketing and sales machine.
 Learn how the SmartRecruiters Talent Acquisition Suite can replace your legacy applicant tracking system and recruiting software.
 This website uses cookies to make the site simpler. Read More Cookie settings ACCEPT
