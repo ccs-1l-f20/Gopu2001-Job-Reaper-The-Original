@@ -73,8 +73,11 @@ if items == 0:
         else:
             page_lines = page.extractText().split('\n')[4:-8]
         for line in page_lines:
+            # looking at each line in the pdf
+            # if first character is not a digit...
             if not line[0].isdigit():
                 name = line
+                # make sure that the names are properly formatted
                 if any((character.isdigit() or character == "'") for character in name):
                     done = False
                     for charID in range(len(name)):
@@ -87,10 +90,15 @@ if items == 0:
                         if name[charID] == "'":
                             name = name[:charID] + "\'\'" + name[charID + 1:]
                             done = True
+                # only case in which this happens
+                elif "OregonPortland" == name:
+                    text += "Oregon\n"
+                    name = "Portland"
                 text += name + '\n'
             else:
                 text += '\n'
 
+    # this part assumes you have [state, city, \n, city, \n, state, city, \n]
     lines = text.split('\n')
     cities = []
     states, state = [], None
@@ -117,6 +125,9 @@ else:
 
 cursor.close()
 conn.close()
+sys.exit()
+
+## All below parts are unnecessary for the web version
 
 # Part 3 #######################################################################
 '''
