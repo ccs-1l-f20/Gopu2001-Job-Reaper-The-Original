@@ -13,9 +13,10 @@ api = Api(app)
 my_loader = jinja2.ChoiceLoader([app.jinja_loader, jinja2.FileSystemLoader(getcwd()),])
 app.jinja_loader = my_loader
 
+# create the json
 class Jobbing(Resource):
     def get(self):
-        connection = sql.connect('jobs.db')
+        connection = sql.connect('ml_jobs.db')
         cursor = connection.cursor()
         command = "select company, title, link from jobs"
         cursor.execute(command)
@@ -33,9 +34,10 @@ class Jobbing(Resource):
 
 api.add_resource(Jobbing, '/jobs.json')
 
+# home page
 @app.route('/')
 def home_page(data=None):
-    connection = sql.connect('jobs.db')
+    connection = sql.connect('ml_jobs.db')
     cursor = connection.cursor()
     command = "select distinct company from jobs"
     cursor.execute(command)
@@ -44,10 +46,11 @@ def home_page(data=None):
     connection.close()
     return render_template('home.html', data=data)
 
+# company page
 @app.route('/companies/<company>/')
 def sub_pages(company, data=None):
     base = '/companies/'
-    connection = sql.connect('jobs.db')
+    connection = sql.connect('ml_jobs.db')
     cursor = connection.cursor()
     command = f"select title, link from jobs where company = '{company}'"
     cursor.execute(command)
@@ -56,5 +59,6 @@ def sub_pages(company, data=None):
     connection.close()
     return render_template('company.html', data=data)
 
+# run in debug mode
 if __name__ == '__main__':
     app.run(debug = True)
