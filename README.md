@@ -21,7 +21,7 @@ The web and desktop interfaces will be available soon. -->
 Please pip install the following packages. Note that the version of Python used is 3.8.
 
 ```bash
-pip install pysqlite3 PyPDF2 google-api-python-client google-auth-httplib2 google-auth-oauthlib selenium bs4 flask flask_restful flask_sqlalchemy
+pip install pysqlite3 PyPDF2 google-api-python-client google-auth-httplib2 google-auth-oauthlib selenium bs4 flask flask_restful flask_sqlalchemy pydf
 ```
 
 You may need to install sqlite3 if you have not already.
