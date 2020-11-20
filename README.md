@@ -30,7 +30,7 @@ pip install torch==1.7.0+cpu torchvision==0.8.1+cpu torchaudio===0.7.0 -f https:
 ```
 You will need to install the chromedriver for your specific Chrome version. Please go to: https://chromedriver.chromium.org/. If you install the latest chromedriver, please be sure to make sure that your Chrome is updated to the most recent version.
 
-You may need to install sqlite3 if you have not already.
+You may need to install sqlite3 if you have not already. To install sqlite3, please go to https://www.sqlite.org/download.html and scroll down to "Precompiled Binaries for [YOUR OS]" and click to install the zipped file. IMPORTANT: FOR WINDOWS USERS: Under "Precompiled Binaries for Windows", please click "sqlite-tools-win32-x86-[LATEST VERSION].zip" to install the command-line shell program. After downloading these files, you may place the "sqlite3.exe" file in the project folder, or to install the file universally, you may store this file into a system directory and ensure that that directory is added to the System PATH.
 
 ## Running the code
 
@@ -44,3 +44,6 @@ In navigating this project, keep in mind the following:
 * run ```python3 'NLP_Practice\naiveBayes jobs.py'``` to train the Naive Bayes model
 * run ```python3 GiantDB\giant.py``` to populate giant.db for use with training the models listed above
 * You may notice some errors with can't find file or related errors as some organization took place after so as to declutter the main folder. Contact me if you have any questions with finding any file.
+
+## Other Files
+This section will be updated in the Wiki soon.
