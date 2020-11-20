@@ -21,7 +21,12 @@ The web and desktop interfaces will be available soon. -->
 Please pip install the following packages. Note that the version of Python used is 3.8.
 
 ```bash
-pip install pysqlite3 PyPDF2 pydf google-api-python-client google-auth-httplib2 google-auth-oauthlib selenium bs4 flask flask_restful flask_sqlalchemy pandas torch
+pip install pysqlite3 PyPDF2 pydf google-api-python-client google-auth-httplib2 google-auth-oauthlib selenium bs4 flask flask_restful flask_sqlalchemy pandas sklearn
+```
+For installing PyTorch, you will need to go to [the PyTorch Website](https://pytorch.org/get-started/locally/) to figure out the command.
+For instance, if installing using pip on cpu, run:
+```bash
+pip install torch==1.7.0+cpu torchvision==0.8.1+cpu torchaudio===0.7.0 -f https://download.pytorch.org/whl/torch_stable.html
 ```
 
 You may need to install sqlite3 if you have not already.
