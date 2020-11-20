@@ -30,7 +30,7 @@ In navigating this project, keep in mind the following:
 * run ```python3 main.py``` to populate the cities.db
 * run ```python3 web.py``` to run the flask server
 * run ```python3 scrape_struct.py``` to populate ml_jobs.db (which is used by web.py)
-* you will require a token.pickle &/ credentials.json file to run scrape_struct.py -- will receive on request
+* you will require a credentials.json file to run scrape_struct.py. This is to connect with the Google Sheets API and will be provided upon request.
 * All html files are templates which are used with web.py
 * run ```python3 NLP_Practice\job_classifier.py``` to train the BERT model
 * run ```python3 'NLP_Practice\naiveBayes jobs.py'``` to train the Naive Bayes model
