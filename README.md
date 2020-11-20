@@ -1,6 +1,8 @@
 # Jobbing-GUI Extension
 
-Jobbing-GUI Extension, also known as Jobbing-GUI Version E, is a Python application meant to keep a track on jobs from a specific set of companies. The list of companies that were used for this project can be found on the [Google Spreadsheet](https://docs.google.com/spreadsheets/d/1057brcM4eALpCzIQWLOM3C6mvXfoAGp8n8XnYJFzbTc/).
+Jobbing-GUI Extension, also known as Jobbing-GUI Version E, is a Python application meant to keep a track on jobs from a specific set of companies. The list of companies that were used for this project can be found on this [Google Spreadsheet](https://docs.google.com/spreadsheets/d/1057brcM4eALpCzIQWLOM3C6mvXfoAGp8n8XnYJFzbTc/). If you are unable to click on the link, you can copy and paste the following into a new tab: https://docs.google.com/spreadsheets/d/1057brcM4eALpCzIQWLOM3C6mvXfoAGp8n8XnYJFzbTc/.
+
+The inspiration for this project came from my search for jobs. There already exist tools like LinkedIn and Indeed that display a lot of jobs, however, these tools notify you of job openings from thousands of companies, many of which you may choose not to work with.
 
 <!-- ## Installation
 
