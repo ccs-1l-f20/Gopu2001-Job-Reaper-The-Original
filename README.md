@@ -16,7 +16,7 @@ This will take approximately 1 minute to gather all of the data.
 
 The web and desktop interfaces will be available soon. -->
 
-## Usage Requirements
+## Installation
 
 Please pip install the following packages. Note that the version of Python used is 3.8.
 
@@ -28,6 +28,7 @@ For instance, if installing using pip on cpu, run:
 ```bash
 pip install torch==1.7.0+cpu torchvision==0.8.1+cpu torchaudio===0.7.0 -f https://download.pytorch.org/whl/torch_stable.html
 ```
+You will need to install the chromedriver for your specific Chrome version. Please go to: https://chromedriver.chromium.org/. If you install the latest chromedriver, please be sure to make sure that your Chrome is updated to the most recent version.
 
 You may need to install sqlite3 if you have not already.
 
