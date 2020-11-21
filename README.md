@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-<<<<<<< ours
 # Jobbing-GUI Extension
 
 Jobbing-GUI Extension, also known as Jobbing-GUI Version E, is a Python application meant to keep a track on jobs from a specific set of companies. The list of companies that were used for this project can be found on this [Google Spreadsheet](https://docs.google.com/spreadsheets/d/1057brcM4eALpCzIQWLOM3C6mvXfoAGp8n8XnYJFzbTc/). If you are unable to click on the link, you can copy and paste the following into a new tab: https://docs.google.com/spreadsheets/d/1057brcM4eALpCzIQWLOM3C6mvXfoAGp8n8XnYJFzbTc/.
@@ -45,6 +43,7 @@ In navigating this project, keep in mind the following:
 * run ```python3 NLP_Practice\job_classifier.py``` to train the BERT model
 * run ```python3 'NLP_Practice\naiveBayes jobs.py'``` to train the Naive Bayes model
 * run ```python3 GiantDB\giant.py``` to populate giant.db for use with training the models listed above
+* In the case you get the error where "saved_weights.pt" file cannot be found, you will need to run ```cd NLP_Practice && python3 job_classifier.py && cd ..``` to train the Bert model. Due to the model weights taking just under 0.5 GB of storage space, this file cannot be uploaded.
 * You may notice some errors with can't find file or related errors as some organization took place after so as to declutter the main folder. Contact me if you have any questions with finding any file.
 =======
 # Jobbing-GUI Extension
@@ -96,7 +95,6 @@ In navigating this project, keep in mind the following:
 
 ## Other Files
 This section will be updated in the Wiki soon.
->>>>>>> theirs
 =======
 # Jobbing-GUI Extension
 
@@ -147,4 +145,3 @@ In navigating this project, keep in mind the following:
 
 ## Other Files
 This section will be updated in the Wiki soon.
->>>>>>> e7f5b1f0c3a740f7687e74ee178868ca349bf34c
