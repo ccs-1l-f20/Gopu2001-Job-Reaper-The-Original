@@ -1,3 +1,5 @@
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 import pandas as pd
 from transformers import AutoModel, BertTokenizerFast
 import torch
@@ -5,7 +7,7 @@ import torch.nn as nn
 import numpy as np
 import time
 
-string = ["Software Engineer", "London, United Kingdom", "11/12/2020"]
+string = ["Account Executive", "Account Executive - Benelux", "Account Executive - (CEE)", "Account Executive - Latin America (ENGLISH FLUENCY REQUIRED)", "Sales", "Dublin, Ireland", "Account Executive - MENA"]
 df = pd.DataFrame(string, columns=["text"])
 
 device = torch.device("cpu")
@@ -40,7 +42,7 @@ class BERT_Arch(nn.Module):
 
 tokenizer = BertTokenizerFast.from_pretrained('bert-base-uncased')
 tokens_test = tokenizer.batch_encode_plus(
-    df["text"].tolist(),
+    [strr.lower() for strr in string],
     max_length = 25,
     padding='max_length',
     truncation=True
@@ -61,3 +63,4 @@ with torch.no_grad():
 preds = np.argmax(preds, axis=1)
 print("Time to predict:", time.time()-start)
 print("\nPredictions:\n", preds)
+print(string)

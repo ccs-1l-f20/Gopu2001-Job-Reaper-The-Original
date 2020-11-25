@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import numpy as np
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.feature_extraction.text import CountVectorizer
@@ -154,4 +153,3 @@ with open(pkl_cv, 'wb') as file:
 # print(preds)
 # print("Just printed out the second set of predictions.")
 # print(False in (preds == predictions))
->>>>>>> e7f5b1f0c3a740f7687e74ee178868ca349bf34c
