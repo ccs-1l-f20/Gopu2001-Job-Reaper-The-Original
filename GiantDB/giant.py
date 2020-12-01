@@ -6,6 +6,7 @@ from selenium import webdriver
 from bs4 import BeautifulSoup
 import sqlite3 as sql
 import sys, os, time
+import pandas as pd
 
 # create a list of stopwords as found on https://www.ranks.nl/stopwords
 stopwords = ['a', 'an', 'the', 'at', 'about', 'around', 'as', 'below', 'by',
@@ -97,6 +98,19 @@ cit_cu.execute("select distinct state from usa")
 states = [state[0] for state in cit_cu.fetchall()]
 cities.append("Remote") # because of COVID situation
 
+# An updated cities database was made available through SimpleMaps
+# Please head to https://simplemaps.com/data/world-cities and download the free
+# version as a CSV for the updated file.
+# NOTE: maintain the filename as worldcities.csv
+world_cities_db = pd.read_csv("worldcities.csv")
+world_cities = list(set([city for city in world_cities_db["city"].tolist() if city not in cities and city not in states]))
+world_states = list(set([state for state in world_cities_db["admin_name"].tolist() if state not in world_cities and state not in cities and state not in states]))
+world_countries = list(set([country for country in world_cities_db["country"].tolist()]))
+
+cities += world_cities
+states += world_states
+countries = world_countries
+
 ## handle the cities first
 insertion_cmd = "insert into giant_jobs(title, yes_no) values "
 last = False
@@ -119,6 +133,8 @@ conn.commit()
 insertion_cmd = "insert into giant_jobs(title, yes_no) values "
 last = False
 for state in states:
+    if type(state) != str: # sometimes there is the occasional nan bc of worldcities.csv
+        continue
     stater = state.lower()
     rl_title = ""
     for word in (''.join([i for i in stater.replace("'", "") if i.isalpha() or i == ' '])).split(" "):
@@ -133,8 +149,70 @@ for state in states:
 curs.execute(insertion_cmd)
 conn.commit()
 
+## handle the countries now
+insertion_cmd = "insert into giant_jobs(title, yes_no) values "
+last = False
+for country in countries:
+    countryr = country.lower()
+    rl_title = ""
+    for word in (''.join([i for i in countryr.replace("'", "") if i.isalpha() or i == ' '])).split(" "):
+        if word not in stopwords:
+            rl_title += word + " "
+    rl_title = rl_title.strip()
+    if country == countries[-1]:
+        last = True
+    insertion_cmd += f"('{rl_title}', '{0}')"
+    if not last:
+        insertion_cmd += ", "
+curs.execute(insertion_cmd)
+conn.commit()
+
 cit_cu.close()
 cit_cn.close()
+
+# Create a list of common languages
+common_languages = [
+    "English",
+    "Mandarin",
+    "Chinese",
+    "Spanish",
+    "Hindi",
+    "Arabic",
+    "Portuguese",
+    "Bengali",
+    "Russian",
+    "Japanese",
+    "Punjabi",
+    "Javanese",
+    "German",
+    "Korean",
+    "French",
+    "Telugu",
+    "Marathi",
+    "Turkish",
+    "Tamil",
+    "Vietnamese",
+    "Urdu",
+    "Indonesian"
+]
+
+## handle the languages now
+insertion_cmd = "insert into giant_jobs(title, yes_no) values "
+last = False
+for lang in common_languages:
+    langr = lang.lower()
+    rl_title = ""
+    for word in (''.join([i for i in langr.replace("'", "") if i.isalpha() or i == ' '])).split(" "):
+        if word not in stopwords:
+            rl_title += word + " "
+    rl_title = rl_title.strip()
+    if lang == common_languages[-1]:
+        last = True
+    insertion_cmd += f"('{rl_title}', '{0}')"
+    if not last:
+        insertion_cmd += ", "
+curs.execute(insertion_cmd)
+conn.commit()
 
 # Here we will add job titles as true data, because apparently, we are getting too many positives
 job_cn, job_cu = get_cnxn("../jobs.db")
@@ -163,7 +241,7 @@ job_cu.close()
 job_cn.close()
 
 # now add some phrases that are common on job sites, but are not job titles
-extra_false_phrases = [
+general_terms = [
     "Department",
     "All Departments",
     "Office",
@@ -208,20 +286,32 @@ extra_false_phrases = [
 	"Marketing, Sales, & Service",
 	"Science, Technology, Engineering, & Mathematics",
     "Technology",
-	"Transportation, Distribution, & Logistics"
+	"Transportation, Distribution, & Logistics",
+    "Entry-level",
+    "Entry-Level",
+    "Entry Level",
+    "Entry level",
+    "Associate",
+    "Mid-Senior level",
+    "Mid-Senior-level",
+    "Mid-Senior Level",
+    "Mid-Senior-Level",
+    "Director",
+    "Executive",
+    "Senior"
 ]
 
 # Here we will add related to job titles as false data, because apparently, we are getting too many positives
 insertion_cmd = "insert into giant_jobs(title, yes_no) values "
 last = False
-for phrase in extra_false_phrases:
+for phrase in general_terms:
     phraser = phrase.lower()
     rl_title = ""
     for word in (''.join([i for i in phraser.replace("'", "") if i.isalpha() or i == ' '])).split(" "):
         if word not in stopwords:
             rl_title += word + " "
     rl_title = rl_title.strip()
-    if phrase == extra_false_phrases[-1]:
+    if phrase == general_terms[-1]:
         last = True
     insertion_cmd += f"('{rl_title}', '{0}')"
     if not last:

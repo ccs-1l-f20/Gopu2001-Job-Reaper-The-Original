@@ -279,6 +279,7 @@ for epoch in range(epochs):
     # save the best model
     if valid_loss < best_valid_loss:
         best_valid_loss = valid_loss
+        print("Saving a better model...")
         torch.save(model.state_dict(), 'saved_weights.pt')
     train_losses.append(train_loss)
     valid_losses.append(valid_loss)

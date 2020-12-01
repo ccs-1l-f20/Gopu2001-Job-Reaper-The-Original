@@ -65,12 +65,40 @@ def load_model():
     # return (bert_model, (nb, cv))
     return bert_model
 
+def format_link(home, link):
+    if link[0] == "/":
+        # homesplit = home.split(".") # www.company.com vs careers.company.com vs company.com
+        full_link = ""
+        if "//" in home:
+            # this means that there is the transfer protocol (HTTP / HTTPS) stated at the beginning
+            full_link = home.split("//")[0] + home.split("//")[1].split("/")[0] + link
+        else:
+            # this means no transfer protocol was stated at the beginning (no [transfer protocol]://[website])
+            full_link = home.split("/")[0] + link
+        return full_link
+    else:
+        return link
+
 def get_predictions(model, strings): # strings is an array of strings to test against
+    # create a list of stopwords as found on https://www.ranks.nl/stopwords
+    stopwords = ['a', 'an', 'the', 'at', 'about', 'around', 'as', 'below', 'by',
+                 'up', 'above', 'for', 'in', 'into', 'like', 'near', 'of', 'off',
+                 'on', 'onto', 'outside', 'over', 'past', 'per', 'round', 'through',
+                 'to', 'toward', 'towards', 'under', 'underneath', 'until', 'via',
+                 'versus', 'vs', 'with']
     # bert_model, nb = model
+    final_strings = []
     strings_lo = [string.lower() for string in strings]
+    for string in strings_lo:
+        rl_title = ""
+        for word in (''.join([i for i in string if i.isalpha() or i == ' '])).split(" "):
+            if word not in stopwords:
+                rl_title += word + " "
+        rl_title = rl_title.strip()
+        final_strings.append(rl_title)
     tokens_test = tokenizer.batch_encode_plus(
-        strings_lo,
-        max_length = 25,
+        final_strings, # was 'strings_lo'
+        max_length = 10, # was 'max_length = 25'
         padding='max_length',
         truncation=True
     )
@@ -84,8 +112,12 @@ def get_predictions(model, strings): # strings is an array of strings to test ag
     # preds = bert_preds + nb_preds - 1
     job_strings = []
     for prediction in range(len(preds)):
-        if preds[prediction] == 1:
+        if preds[prediction] == 1 and len((''.join([i for i in strings[prediction] if i.isalpha() or i == ' '])).split(" ")) <= len(final_strings[prediction].split(" ")):
             job_strings.append(strings[prediction])
+    # # Uncomment below for testing purposes
+    # print("\n\n--------------------------")
+    # print(job_strings)
+    # print("--------------------------\n\n")
     return job_strings
 
 '''
@@ -104,7 +136,7 @@ def __INIT_GS_API():
     df = pd.read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vRGRGTwZ6BY3yxYJZBNlMqQVPNrqiySkYpGlyHAZymxSIjP-6aMOqPpuA-HwOuZRgQRyQj8SrRvjFt3/pub?gid=0&single=true&output=csv")
     job_links = list(zip(df["Company Name"].tolist(), df["Job Page Link"].tolist()))
     # print(job_links[0:3]) # Test works!
-    return job_links[2:3]
+    return job_links[0:3]
 
 def get_cnxn(src):
     conn, curs = None, None
@@ -136,6 +168,7 @@ def submit_report(jobs):
     curs.execute('create table jobs ( company nvarchar(20), title nvarchar(120), link nvarchar(175) )')
     conn.commit()
     insertion_cmd = "insert into jobs (company, title, link) values "
+    start_command = insertion_cmd
     last = False
     for match in jobs:
         if match == jobs[-1]:
@@ -147,8 +180,9 @@ def submit_report(jobs):
         insertion_cmd += f"('{company}', '{title}', '{link}')"
         if not last:
             insertion_cmd += ", "
-    curs.execute(insertion_cmd)
-    conn.commit()
+    if start_command != insertion_cmd:
+        curs.execute(insertion_cmd)
+        conn.commit()
     # close the sqlite3 connection
     curs.close()
     conn.close()
@@ -158,28 +192,158 @@ This part will scan the website for probable job titles and return them.
 '''
 
 def __INIT_JOB_SCAN(job_links):
+    global world_cities, common_languages, general_terms
     structurizer = import_module("structurizer")
     jobs = []
     for board in job_links:
         print("Loading data from", board[0] + "...")
+        start_time = time.time()
         web = structurizer.Website(company=board[0], url=board[1])
         count = 0
-        start_time = time.time()
         paths = []
+        banned_paths = []
         for job_title in get_predictions(load_model(), web.get_text()):
             path = web.get_path(job_title)
-            if path not in paths and path != None:
+            if path not in paths and path not in banned_paths and path != None:
+                temp_jobs = []
+                temp_count = 0
                 for match in web.get_by_path(path):
-                    if 'job' in match[1] or 'career' in match[1]:
-                        count += 1
-                        jobs.append((web.company, match[0].strip(), match[1].strip()))
+                    # implement barring cities here
+                    if match[0].strip().split(",")[0] in world_cities:
+                        # print("Discarding match: `" + match[0].strip() + "` because it is a city.")
+                        banned_paths.append(path)
+                        break
+                    # implement barring languages here
+                    if match[0].strip() in common_languages:
+                        # print("Discarding match: `" + match[0].strip() + "` because it is a language.")
+                        banned_paths.append(path)
+                        break
+                    # implement barring general departments here
+                    if match[0].strip() in general_terms:
+                        # print("Discarding match: `" + match[0].strip() + "` because it is a general term")
+                        banned_paths.append(path)
+                        break
+                    # finally add all jobs found to a temp list to be added later
+                    if ('job' in match[1].split("?")[0].lower() or 'career' in match[1].split("?")[0].lower()) and web.get_url().split("?")[0].strip() != match[1].split("?")[0].strip() and match[1].split("?")[0].strip() not in web.get_url().split("?")[0].strip():
+                        temp_count += 1
+                        temp_jobs.append((web.company, match[0].strip(), format_link(web.get_url(), match[1].strip())))
                     # else:
                         # print("Not matched:", match[0].strip(), "|", match[1])
-                paths.append(path)
+                if path not in banned_paths:
+                    paths.append(path)
+                    jobs += temp_jobs
+                    count += temp_count
         print("\tCompleted in", str(time.time()-start_time) + "s.")
         print("\tFound", count, "jobs @", web.company)
         # print("\tSo far I have collected", len(jobs), "jobs.")
     submit_report(jobs)
 
 if __name__ == '__main__':
+    # Create a list of common languages
+    # same one in giant.py
+    common_languages = [
+        "English",
+        "Mandarin",
+        "Chinese",
+        "Spanish",
+        "Hindi",
+        "Arabic",
+        "Portuguese",
+        "Bengali",
+        "Russian",
+        "Japanese",
+        "Punjabi",
+        "Javanese",
+        "German",
+        "Korean",
+        "French",
+        "Telugu",
+        "Marathi",
+        "Turkish",
+        "Tamil",
+        "Vietnamese",
+        "Urdu",
+        "Indonesian"
+    ]
+    general_terms = [
+        "Department",
+        "All Departments",
+        "Office",
+        "All Offices",
+        "Finance",
+        "Current Job Openings",
+        "Global Support",
+        "Human Resources",
+        "HR",
+        # "IT", # Leland Management has a job called "IT"
+        "Marketing",
+        "Product",
+        # "Product Designer", # That is a job title. I don't know what I was thinking...
+        "Professional Services",
+        "Research and Development",
+        "Engineering",
+        "Applications",
+        "Cloud Engineering",
+        "Data Infrastructure & Security",
+        "Data Platforms",
+        "Quality & Release",
+        "Security",
+        "Runtime",
+        "SQL",
+        "Sales",
+        "Alliances",
+        "Corporate Sales",
+        "Customer & Product Strategy",
+        "Sales Engineering",
+        "Sales Operations",
+        "Workplace",
+        "Agriculture, Food, & Natural Resources",
+    	"Architecture & Construction",
+    	"Arts, Audio/Video Technology, and Communications",
+    	"Business, Management, & Administration",
+    	"Education & Training",
+    	"Government & Public Administration",
+    	"Health Science",
+    	"Hospitality & Tourism",
+    	"Information Technology",
+    	"Law, Public Safety, Corrections, & Security",
+    	"Manufacturing",
+    	"Marketing, Sales, & Service",
+    	"Science, Technology, Engineering, & Mathematics",
+        "Technology",
+    	"Transportation, Distribution, & Logistics",
+        "Entry-level",
+        "Entry-Level",
+        "Entry Level",
+        "Entry level",
+        "Associate",
+        "Mid-Senior level",
+        "Mid-Senior-level",
+        "Mid-Senior Level",
+        "Mid-Senior-Level",
+        # "Director", # Shear Perfection Academy of Cosmetology has a job opening called "Director"
+        "Executive",
+        "Senior",
+        "Careers",
+        "Career",
+        "About",
+        "About us",
+        "About Us",
+        "Benefits",
+        "Diversity",
+        "Career Site Cookie Settings", # The following 3 seem to be the variants
+        "Cookie Settings",
+        "Update Cookie Settings",
+        "Equal Employment Opportunity Policy" # sometimes this may come up
+    ]
+    cities_db = pd.read_csv("GiantDB/worldcities.csv")
+    cit_cn, cit_cu = get_cnxn("cities.db")
+    cit_cu.execute("select distinct city from usa")
+    cities = [city[0] for city in cit_cu.fetchall()]
+    # cities.append("Remote") # because of COVID situation
+    # REASON: job title could be Remote Justice ...
+    world_cities = cities_db["city"].tolist()
+    world_cities += cities
+    cit_cu.close()
+    cit_cn.close()
     __INIT_JOB_SCAN(__INIT_GS_API())

@@ -7,7 +7,7 @@ import torch.nn as nn
 import numpy as np
 import time
 
-string = ["Account Executive", "Account Executive - Benelux", "Account Executive - (CEE)", "Account Executive - Latin America (ENGLISH FLUENCY REQUIRED)", "Sales", "Dublin, Ireland", "Account Executive - MENA"]
+string = ["Learn about the recruiting process", "Learn recruiting process"]
 df = pd.DataFrame(string, columns=["text"])
 
 device = torch.device("cpu")
@@ -43,7 +43,7 @@ class BERT_Arch(nn.Module):
 tokenizer = BertTokenizerFast.from_pretrained('bert-base-uncased')
 tokens_test = tokenizer.batch_encode_plus(
     [strr.lower() for strr in string],
-    max_length = 25,
+    max_length = 10, # was '25'
     padding='max_length',
     truncation=True
 )

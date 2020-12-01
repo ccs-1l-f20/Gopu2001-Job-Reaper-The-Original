@@ -1,7 +1,7 @@
 #!/usr/bin/python3.8
 # Anmol Kapoor
 
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from flask_restful import Resource, Api
 from os import getcwd
 import sqlite3 as sql
@@ -58,6 +58,49 @@ def sub_pages(company, data=None):
     cursor.close()
     connection.close()
     return render_template('company.html', data=data)
+
+# search results page
+@app.route('/search-results')
+def find_jobs():
+    sql_keywords = [
+        "add",
+        "alter",
+        "delete",
+        "all",
+        "backup database",
+        "between",
+        "case",
+        "like",
+        "select",
+        "company",
+        "title",
+        "link",
+        "upper",
+        "column",
+        "create",
+        "desc",
+        "drop",
+        "from",
+        "set",
+        "table",
+        "jobs",
+        "union",
+        "values",
+        "view",
+        "where"
+    ]
+    string = request.args['find-feature']
+    for word in string.split(" "):
+        if word.lower() in sql_keywords:
+            return "Sorry, you are not permitted to search for that job."
+    connection = sql.connect('ml_jobs.db')
+    cursor = connection.cursor()
+    command = f"select company, title, link from jobs where upper(title) like upper(\"%{string}%\")"
+    cursor.execute(command)
+    data = cursor.fetchall()
+    cursor.close()
+    connection.close()
+    return render_template('search-results.html', data=data, search=string)
 
 # run in debug mode
 if __name__ == '__main__':

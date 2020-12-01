@@ -42,7 +42,7 @@ class Website:
         # setting up the browser and getting the url post-JS loading
         self.browser = webdriver.Chrome(options=self.CrOptions, service_log_path="NUL")
         self.browser.get(url)
-        time.sleep(0.3)
+        time.sleep(1)
         self.html = self.browser.page_source
         # Closing and quiting the browser's processes
         self.browser.close()
@@ -144,7 +144,7 @@ class Website:
                         self.link = None
                         # if the a tag doesn't have a href attribute, then assume no link
                 if len(path) == 1 and type(child) == element.NavigableString:
-                    if self.link != None and self.link not in self.past_links and self.link != "javascript:void(0);" and self.link != "javascript:void(0)" and self.link[0] != "#" and str(child).strip() != "": ## assumption: there are href links
+                    if self.link != None and self.link != "" and self.link not in self.past_links and self.link != "javascript:void(0);" and self.link != "javascript:void(0)" and self.link[0] != "#" and str(child).strip() != "": ## assumption: there are href links
                         matches.append((child, self.link))
                         self.past_links.append(self.link)
                     ## print error message
