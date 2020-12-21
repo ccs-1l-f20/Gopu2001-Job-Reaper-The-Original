@@ -1,5 +1,6 @@
-import re, time
+import re, time, sys
 from selenium import webdriver
+from selenium.webdriver.common.by import By
 from bs4 import BeautifulSoup
 from bs4 import element
 
@@ -43,12 +44,27 @@ class Website:
         self.browser = webdriver.Chrome(options=self.CrOptions, service_log_path="NUL")
         self.browser.get(url)
         time.sleep(1)
+        page = 1
         self.html = self.browser.page_source
+        # creating a soup with the html as the ingredient
+        self.soup = BeautifulSoup(self.html, "html.parser")
+        # inserting body tag's innerHTML from all the rest of the pages (2 to n)
+        while(str(page+1) in self.soup.body.stripped_strings):
+            # click on the element with just page#
+            to_click = self.browser.find_elements(By.XPATH, f"//*[text()='{page+1}']")[0]
+            self.browser.execute_script('arguments[0].click();', to_click)
+            time.sleep(0.5)
+            # updating the html and soup variables
+            self.html = self.html.split("</body>")[0] + self.browser.find_element(By.TAG_NAME, "body").get_attribute('innerHTML') + "</body>" + self.html.split("</body>")[1]
+            self.soup = BeautifulSoup(self.html, "html.parser")
+            page += 1
+            sys.stdout.write("\r")
+            sys.stdout.write(f"Page: {page}")
+            sys.stdout.flush()
+        sys.stdout.write("\r")
         # Closing and quiting the browser's processes
         self.browser.close()
         self.browser.quit()
-        # creating a soup with the html as the ingredient
-        self.soup = BeautifulSoup(self.html, "html.parser")
 
     '''
     Getters and Setters for the HTML (string)
@@ -62,7 +78,7 @@ class Website:
     Getter for the text in an HTML
     '''
     def get_text(self):
-        return [string for string in self.soup.body.stripped_strings]
+        return list(set([string for string in self.soup.body.stripped_strings]))
         # return [string.strip() for string in self.soup.body.get_text().split("\n") if string.strip() != "" and not "<" in string]
 
     '''
@@ -160,12 +176,12 @@ class Website:
         return matches
 
 if __name__ == "__main__":
-    url = "https://careers.activision.com/search-results"
-    company = "Activision"
+    url = "https://www.hubspot.com/careers/jobs?page=1"
+    company = "HubSpot"
     # sample = "Executive Assistant"
     # setup_start = time.time()
     webpage = Website(url, company)
-    print(webpage.get_text())
+    # print(webpage.get_text())
     # start = time.time()
     # path = webpage.get_path(sample)
     # all_commons = []

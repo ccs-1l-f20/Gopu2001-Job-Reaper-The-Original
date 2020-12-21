@@ -323,7 +323,6 @@ def scrape(job_link):
 
     if 'hubspot' in url.lower():
         sections = sp.find_all('a', class_='sc-bdVaJa bKWNxX')
-        #print(len(sections), 'job opportunities!', end = '')
         for opp in sections:
             title = opp.find_all('p', class_ = 'sc-htpNat iUzPVU')[0].string
             loc = opp.find_all('p', class_ = 'sc-ifAKCX gHfmgn')[0].string

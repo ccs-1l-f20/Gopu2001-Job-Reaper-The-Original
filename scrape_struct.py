@@ -65,20 +65,6 @@ def load_model():
     # return (bert_model, (nb, cv))
     return bert_model
 
-def format_link(home, link):
-    if link[0] == "/":
-        # homesplit = home.split(".") # www.company.com vs careers.company.com vs company.com
-        full_link = ""
-        if "//" in home:
-            # this means that there is the transfer protocol (HTTP / HTTPS) stated at the beginning
-            full_link = home.split("//")[0] + home.split("//")[1].split("/")[0] + link
-        else:
-            # this means no transfer protocol was stated at the beginning (no [transfer protocol]://[website])
-            full_link = home.split("/")[0] + link
-        return full_link
-    else:
-        return link
-
 def get_predictions(model, strings): # strings is an array of strings to test against
     # create a list of stopwords as found on https://www.ranks.nl/stopwords
     stopwords = ['a', 'an', 'the', 'at', 'about', 'around', 'as', 'below', 'by',
@@ -151,6 +137,20 @@ def get_cnxn(src):
         sys.exit(1)
     return conn, curs
 
+def format_link(home, link):
+    if link[0] == "/":
+        # homesplit = home.split(".") # www.company.com vs careers.company.com vs company.com
+        full_link = ""
+        if "//" in home:
+            # this means that there is the transfer protocol (HTTP / HTTPS) stated at the beginning
+            full_link = home.split("//")[0] + home.split("//")[1].split("/")[0] + link
+        else:
+            # this means no transfer protocol was stated at the beginning (no [transfer protocol]://[website])
+            full_link = home.split("/")[0] + link
+        return full_link
+    else:
+        return link
+
 def submit_report(jobs):
     print("Report:")
     print("\tNumber of Jobs found:", len(jobs))
@@ -176,13 +176,18 @@ def submit_report(jobs):
         # print(type(match[0]), type(match[1]), type(match[2]))
         company = match[0].replace("'", "")
         title = match[1].replace("'", "")
-        link = match[2]
+        link = match[2].replace("'", "")
         insertion_cmd += f"('{company}', '{title}', '{link}')"
         if not last:
             insertion_cmd += ", "
-    if start_command != insertion_cmd:
-        curs.execute(insertion_cmd)
-        conn.commit()
+    try:
+        if start_command != insertion_cmd:
+            curs.execute(insertion_cmd)
+            conn.commit()
+    except sql.OperationalError as e:
+        sys.stderr.write(insertion_cmd + "\n")
+        sys.stderr.write(e)
+        sys.stderr.flush()
     # close the sqlite3 connection
     curs.close()
     conn.close()
@@ -192,13 +197,14 @@ This part will scan the website for probable job titles and return them.
 '''
 
 def __INIT_JOB_SCAN(job_links):
-    global world_cities, common_languages, general_terms
+    global world_cities, world_countries_states, common_languages, general_terms
     structurizer = import_module("structurizer")
     jobs = []
     for board in job_links:
         print("Loading data from", board[0] + "...")
         start_time = time.time()
         web = structurizer.Website(company=board[0], url=board[1])
+        print("Done. Analyzing data...")
         count = 0
         paths = []
         banned_paths = []
@@ -209,18 +215,19 @@ def __INIT_JOB_SCAN(job_links):
                 temp_count = 0
                 for match in web.get_by_path(path):
                     # implement barring cities here
-                    if match[0].strip().split(",")[0] in world_cities:
-                        # print("Discarding match: `" + match[0].strip() + "` because it is a city.")
+                    # logic: if the word(s) before "," is a city and if the word(s) after "," is a state or none
+                    if match[0].strip().split(",")[0] in world_cities and (len(match[0].strip().split(",")) == 1 or match[0].strip().split(",")[1] in world_countries_states):
+                        print("Discarding match: `" + match[0].strip() + "` because it is a city.")
                         banned_paths.append(path)
                         break
                     # implement barring languages here
                     if match[0].strip() in common_languages:
-                        # print("Discarding match: `" + match[0].strip() + "` because it is a language.")
+                        print("Discarding match: `" + match[0].strip() + "` because it is a language.")
                         banned_paths.append(path)
                         break
                     # implement barring general departments here
                     if match[0].strip() in general_terms:
-                        # print("Discarding match: `" + match[0].strip() + "` because it is a general term")
+                        print("Discarding match: `" + match[0].strip() + "` because it is a general term")
                         banned_paths.append(path)
                         break
                     # finally add all jobs found to a temp list to be added later
@@ -340,8 +347,9 @@ if __name__ == '__main__':
     cit_cn, cit_cu = get_cnxn("cities.db")
     cit_cu.execute("select distinct city from usa")
     cities = [city[0] for city in cit_cu.fetchall()]
+    world_countries_states = list(set(cities_db["country"].tolist() + cities_db["admin_name"].tolist()))
     # cities.append("Remote") # because of COVID situation
-    # REASON: job title could be Remote Justice ...
+    # REASON: job title could be Remote Justice / Remote Sales ...
     world_cities = cities_db["city"].tolist()
     world_cities += cities
     cit_cu.close()
